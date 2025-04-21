@@ -1,0 +1,616 @@
+{
+    "info": {
+        "name": "CRUD API Collection",
+        "description": "Collection for testing CRUD APIs for Admin, Bike, Bike-Statistic, Parking-Spot, and Employee.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Admin",
+            "item": [
+                {
+                    "name": "Sign Up Admin",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"admin1\",\n  \"password\": \"adminpassword\",\n  \"role\": \"SuperAdmin\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/admin/signup",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "admin",
+                                "signup"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login Admin",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"admin1\",\n  \"password\": \"adminpassword\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/admin/login",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "admin",
+                                "login"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Logout Admin",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:3000/admin/logout",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "admin",
+                                "logout"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Admin",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"admin2\",\n  \"password\": \"password123\",\n  \"role\": \"AdminFinance\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/admin/admin/create",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "admin",
+                                "admin",
+                                "create"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Find All Admins",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/admin/admin/findAll",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "admin",
+                                "admin",
+                                "findAll"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Find Admin by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/admin/admin/findOne/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "admin",
+                                "admin",
+                                "findOne",
+                                ":id"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Admin",
+                    "request": {
+                        "method": "PUT",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"updatedadmin\",\n  \"password\": \"newpassword\",\n  \"role\": \"AdminOperasional\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/admin/admin/update/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "admin",
+                                "admin",
+                                "update",
+                                ":id"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Admin",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "http://localhost:3000/admin/admin/remove/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "admin",
+                                "admin",
+                                "remove",
+                                ":id"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Bike",
+            "item": [
+                {
+                    "name": "Create Bike",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Id_Bike\": \"bike123\",\n  \"Model_Image\": \"image.jpg\",\n  \"IMEI\": \"123456789\",\n  \"Model_Version\": \"v1.0\",\n  \"Type\": \"Electric\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/bike/bike/create",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "bike",
+                                "bike",
+                                "create"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Find All Bikes",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/bike/bike/findAll",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "bike",
+                                "bike",
+                                "findAll"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Find Bike by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/bike/bike/findOne/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "bike",
+                                "bike",
+                                "findOne",
+                                ":id"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Bike",
+                    "request": {
+                        "method": "PUT",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Model_Image\": \"updated.jpg\",\n  \"IMEI\": \"987654321\",\n  \"Model_Version\": \"v2.0\",\n  \"Type\": \"Manual\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/bike/bike/update/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "bike",
+                                "bike",
+                                "update",
+                                ":id"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Bike",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "http://localhost:3000/bike/bike/remove/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "bike",
+                                "bike",
+                                "remove",
+                                ":id"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "BikeStatistic",
+            "item": [
+                {
+                    "name": "Create Bike Statistic",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Id_Bike_Statistic\": \"stat123\",\n  \"Bluetooth_Key\": \"key123\",\n  \"Lock_Status\": \"LOCKED\",\n  \"Batterry_Status\": 90,\n  \"Position\": \"Location A\",\n  \"Id_Bike\": \"bike123\",\n  \"Id_Parking\": \"parking123\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/bike-statistic/bike-statistic/create",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "bike-statistic",
+                                "bike-statistic",
+                                "create"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Find All Bike Statistics",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/bike-statistic/bike-statistic/findAll",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "bike-statistic",
+                                "bike-statistic",
+                                "findAll"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Find Bike Statistic by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/bike-statistic/bike-statistic/findOne/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "bike-statistic",
+                                "bike-statistic",
+                                "findOne",
+                                ":id"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Bike Statistic",
+                    "request": {
+                        "method": "PUT",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Bluetooth_Key\": \"updatedkey\",\n  \"Lock_Status\": \"UNLOCKED\",\n  \"Batterry_Status\": 80,\n  \"Position\": \"Updated Location\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/bike-statistic/bike-statistic/update/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "bike-statistic",
+                                "bike-statistic",
+                                "update",
+                                ":id"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Bike Statistic",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "http://localhost:3000/bike-statistic/bike-statistic/romeve/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "bike-statistic",
+                                "bike-statistic",
+                                "romeve",
+                                ":id"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "ParkingSpot",
+            "item": [
+                {
+                    "name": "Create Parking Spot",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Id_Parking\": \"parking123\",\n  \"Location\": \"Parking A\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/parking-spot",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "parking-spot"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Find All Parking Spots",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/parking-spot",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "parking-spot"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Find Parking Spot by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/parking-spot/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "parking-spot",
+                                ":id"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Parking Spot",
+                    "request": {
+                        "method": "PUT",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Location\": \"Updated Location\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/parking-spot/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "parking-spot",
+                                ":id"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Parking Spot",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "http://localhost:3000/parking-spot/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "parking-spot",
+                                ":id"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Employee",
+            "item": [
+                {
+                    "name": "Create Employee",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Username\": \"employee1\",\n  \"Password\": \"password\",\n  \"Departemen\": \"Operational\",\n  \"Status\": \"Active\",\n  \"Phone_Number\": \"123456789\",\n  \"Id_Admin\": \"admin123\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/employee/employee/create",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "employee",
+                                "employee",
+                                "create"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Find All Employees",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/employee/employee/findAll",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "employee",
+                                "employee",
+                                "findAll"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Find Employee by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/employee/employee/findOne/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "employee",
+                                "employee",
+                                "findOne",
+                                ":id"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Employee",
+                    "request": {
+                        "method": "PUT",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"Departemen\": \"Finance\",\n  \"Status\": \"Inactive\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/employee/employee/update/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "employee",
+                                "employee",
+                                "update",
+                                ":id"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Employee",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "http://localhost:3000/employee/employee/remove/:id",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000",
+                            "path": [
+                                "employee",
+                                "employee",
+                                "remove",
+                                ":id"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

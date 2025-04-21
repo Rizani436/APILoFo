@@ -1,0 +1,118 @@
+// Prisma schema adapted from the provided SQL dump
+
+// You need to define the datasource and generator
+// Example:
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Admin {
+  username     String @id
+  password     String
+  namaLengkap  String
+  noHP         String
+  pictUrl   String
+}
+
+model User {
+  username      String     @id
+  email         String     @unique
+  password      String
+  namaLengkap   String
+  jenisKelamin  String
+  alamat        String
+  noHP          String
+  pictUrl    String
+  
+  barangHilang  BarangHilang[] @relation("UserToBarangHilang")
+  barangTemuan  BarangTemuan[] @relation("UserToBarangTemuan")
+  jawaban       JawabanPertanyaan[] @relation("UserToJawaban")
+  notifikasi    Notifikasi[]
+}
+
+
+model BarangHilang {
+  idBarangHilang   String   @id @default(cuid())
+  uploader         String
+  namaBarang       String
+  kategoriBarang   KategoriBarang
+  tanggalHilang DateTime
+  tempatHilang String
+  kotaKabupaten    String
+  informasiDetail  String
+  noHP             String
+  pictUrl     String
+  status           StatusBarang? @default(Menunggu)
+  latitude Float
+  longitude Float
+  
+  User             User    @relation("UserToBarangHilang", fields: [uploader], references: [username], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model BarangTemuan {
+  idBarangTemuan   String   @id @default(cuid())
+  uploader         String
+  namaBarang       String
+  kategoriBarang   KategoriBarang
+  tanggalTemuan  DateTime
+  tempatTemuan   String
+  kotaKabupaten    String
+  informasiDetail  String
+  noHP             String
+  pictUrl     String
+  status           StatusBarang @default(Menunggu)
+  latitude Float
+  longitude Float
+
+  User             User    @relation("UserToBarangTemuan", fields: [uploader], references: [username], onDelete: Cascade, onUpdate: Cascade)
+  jawabanPertanyaan JawabanPertanyaan[]
+  notifikasi        Notifikasi[]
+}
+
+enum KategoriBarang {
+  Accessoris
+  Kendaraan
+  Elektronik
+  Document
+  DLL
+}
+
+enum StatusBarang {
+  Diterima
+  Ditolak
+  Menunggu
+  Selesai
+}
+
+model JawabanPertanyaan {
+  idJawabanPertanyaan               Int    @id @default(autoincrement())
+  idBarangTemuan   String
+  penanya          String
+  pertanyaan       String
+  penjawab         String
+  jawaban          String
+
+  barangTemuan     BarangTemuan @relation(fields: [idBarangTemuan], references: [idBarangTemuan], onDelete: Cascade, onUpdate: Cascade)
+  User             User          @relation("UserToJawaban", fields: [penjawab], references: [username], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Notifikasi {
+  notification_id  Int    @id @default(autoincrement())
+  idUser           String
+  idBarangTemuan   String
+  pesanNotifikasi  String
+  read             NotifStatus @default(belumDibaca)
+
+  User             User          @relation(fields: [idUser], references: [username], onDelete: Cascade, onUpdate: Cascade)
+  barangTemuan     BarangTemuan @relation(fields: [idBarangTemuan], references: [idBarangTemuan], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum NotifStatus {
+  belumDibaca
+  sudahDibaca
+}
