@@ -26,16 +26,16 @@ export class userService {
     });
     if (existingUser && existingUsername) {
       throw new HttpException(
-        'Username and Email already exists',
+        'Username and Email sudah ada',
         HttpStatus.BAD_REQUEST,
       );
     } else if (existingUsername) {
       throw new HttpException(
-        'Username already exists',
+        'Username sudah ada',
         HttpStatus.BAD_REQUEST,
       );
     } else if (existingUser) {
-      throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Email sudah ada', HttpStatus.BAD_REQUEST);
     }
     const newUser = await this.prisma.user.create({
       data: {
@@ -80,7 +80,7 @@ export class userService {
 
   async logout(token: string){
     this.deleteRedis(token);
-    return { message: 'Logged out successfully' };
+    return { message: 'Logged out berhasil' };
   }
 
   async create(dataData: CreateUserDto) {
@@ -93,16 +93,16 @@ export class userService {
     });
     if (existingUser && existingUsername) {
       throw new HttpException(
-        'Username and Email already exists',
+        'Username and Email sudah ada',
         HttpStatus.BAD_REQUEST,
       );
     } else if (existingUsername) {
       throw new HttpException(
-        'Username already exists',
+        'Username sudah ada',
         HttpStatus.BAD_REQUEST,
       );
     } else if (existingUser) {
-      throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Email sudah ada', HttpStatus.BAD_REQUEST);
     }
     return this.prisma.user.create({
       data: {

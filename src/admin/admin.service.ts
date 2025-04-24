@@ -36,7 +36,7 @@ export class AdminService {
 
   async logout(token: string): Promise<{ message: string }> {
     this.deleteRedis(token);
-    return { message: 'Logged out successfully' };
+    return { message: 'Logged out berhasil' };
   }
 
   async create(dataData: CreateAdminDto) {
@@ -47,7 +47,7 @@ export class AdminService {
     });
     if (existingUsername) {
       throw new HttpException(
-        'Username already exists',
+        'Username sudah ada',
         HttpStatus.BAD_REQUEST,
       );
     }
