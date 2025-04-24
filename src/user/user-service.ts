@@ -75,7 +75,7 @@ export class userService {
 
     const token = this.jwtService.sign({ id: User.username });
     this.setRedis(token, User);
-    return { token };
+    return { User,token };
   }
 
   async logout(token: string){

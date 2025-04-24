@@ -31,7 +31,7 @@ export class AdminService {
 
     const token = this.jwtService.sign({ id: admin.username });
     this.setRedis(token, admin);
-    return { token };
+    return { admin, token };
   }
 
   async logout(token: string): Promise<{ message: string }> {
