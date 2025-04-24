@@ -24,10 +24,10 @@ export class AdminController {
   
   @Post('login')
   async login(
-    @Body('email') email: string,
+    @Body('username') username: string,
     @Body('password') password: string
   ) {
-    return this.AdminService.login(email, password);
+    return this.AdminService.login(username, password);
   }
 
   @Post('logout')

@@ -58,15 +58,19 @@ export class userService {
   }
 
   async login(username: string, password: string) {
-    const User = await this.prisma.user.findFirst({
+    const User = await this.prisma.user.findUnique({
       where: { username: username },
     });
     if (!User) {
-      throw new Error('user tidak ditemukan');
+      throw new HttpException('user tidak ada', HttpStatus.NOT_FOUND);
     }
+    console.log(User);
     const isPasswordValid = await bcrypt.compare(password, User.password);
     if (!isPasswordValid) {
-      throw new Error('password tidak valid');
+      throw new HttpException(
+        'password tidak valid',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const token = this.jwtService.sign({ id: User.username });
@@ -179,18 +183,22 @@ export class userService {
     });
 
     if (!user) {
-      throw new Error('user tidak ditemukan');
+      throw new HttpException('user tidak ditemukan', HttpStatus.NOT_FOUND);
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new Error('password saat ini tidak valid');
+      throw new HttpException(
+        'password saat ini tidak valid',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const isSamePassword = await bcrypt.compare(newPassword, user.password);
     if (isSamePassword) {
-      throw new Error(
+      throw new HttpException(
         'password baru tidak boleh sama dengan password saat ini',
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -211,7 +219,7 @@ export class userService {
   async deleteRedis(token: string) {
     const existingUser = await this.redisSession.getSession(token);
     if (!existingUser) {
-      throw new Error('User not found');
+      throw new HttpException('user tidak ditemukan', HttpStatus.NOT_FOUND);
     }
     return this.redisSession.deleteSession(token);
   }

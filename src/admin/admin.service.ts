@@ -19,11 +19,14 @@ export class AdminService {
       where: { username: username },
     });
     if (!admin) {
-      throw new Error('user tidak ditemukan');
+      throw new HttpException('admin tidak ditemukan', HttpStatus.NOT_FOUND);
     }
     const isPasswordValid = await bcrypt.compare(password, admin.password);
     if (!isPasswordValid) {
-      throw new Error('password tidak valid');
+      throw new HttpException(
+        'password tidak valid',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const token = this.jwtService.sign({ id: admin.username });
@@ -115,18 +118,22 @@ export class AdminService {
     });
 
     if (!admin) {
-      throw new Error('admin tidak ditemukan');
+      throw new HttpException('admin tidak ditemukan', HttpStatus.NOT_FOUND);
     }
 
     const isPasswordValid = await bcrypt.compare(password, admin.password);
     if (!isPasswordValid) {
-      throw new Error('password saat ini tidak valid');
+      throw new HttpException(
+        'password saat ini tidak valid',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const isSamePassword = await bcrypt.compare(newPassword, admin.password);
     if (isSamePassword) {
-      throw new Error(
+      throw new HttpException(
         'password baru tidak boleh sama dengan password saat ini',
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -146,7 +153,7 @@ export class AdminService {
   async deleteRedis(token: string) {
     const existingAdmin = await this.redisSession.getSession(token);
     if (!existingAdmin) {
-      throw new Error('Admin not found');
+      throw new HttpException('admin tidak ditemukan', HttpStatus.NOT_FOUND);
     }
     return this.redisSession.deleteSession(token);
   }

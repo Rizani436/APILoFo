@@ -28,10 +28,10 @@ export class userController {
 
   @Post('login')
   async login(
-    @Body('email') email: string,
+    @Body('username') username: string,
     @Body('password') password: string
   ) {
-    return this.userService.login(email, password);
+    return this.userService.login(username, password);
   }
 
   @Post('logout')
