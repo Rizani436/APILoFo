@@ -7,13 +7,14 @@ import {
 // import * as ExcelJS from 'exceljs';
 // import { Response } from 'express';
 // import * as fs from 'fs';
-// import { File as MulterFile } from 'multer';
+import { File as MulterFile } from 'multer';
 
 @Injectable()
 export class BarangHilangService {
   private prisma = new PrismaClient();
 
-  async create(dataData: CreateBarangHilangDto) {
+  async create(dataData: CreateBarangHilangDto, file: MulterFile) {
+    const url = `http://localhost:3000/uploads/${file.filename}`;
     return this.prisma.barangHilang.create({
       data: {
         uploader: dataData.userId,
@@ -24,7 +25,7 @@ export class BarangHilangService {
         kotaKabupaten: dataData.kotaKabupaten,
         informasiDetail: dataData.informasiDetail,
         noHP: dataData.noHP,
-        pictUrl: dataData.pictUrl,
+        pictUrl: url,
         status: dataData.status,
         latitude: dataData.latitude,
         longitude: dataData.longitude,

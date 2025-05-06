@@ -18,19 +18,36 @@ import { CreateBarangHilangDto, UpdateBarangHilangDto } from './dto/barang-hilan
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerConfig } from '../config/multer.config';
-import { File as MulterFile } from 'multer';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { File as MulterFile } from 'multer';;
 
 @Controller('barang-Hilang')
 export class BarangHilangController {
   constructor(private readonly BarangHilangService: BarangHilangService) {}
 
   @Post('create')
-  async create(
-    @Body(new ValidationPipe({ whitelist: true }))
-    dataData: CreateBarangHilangDto,
-  ) {
-    return this.BarangHilangService.create(dataData);
-  }
+    @UseInterceptors(
+      FileInterceptor('file', {
+        storage: diskStorage({
+          destination: './uploads',
+          filename: (req, file, cb) => {
+            const uniqueName = `${Date.now()}-${Math.round(
+              Math.random() * 1e9,
+            )}${extname(file.originalname)}`;
+            cb(null, uniqueName);
+          },
+        }),
+      }),
+    )
+    async create(
+      @UploadedFile() file: MulterFile,
+      @Body(new ValidationPipe({ whitelist: true }))
+      dataData: CreateBarangHilangDto,
+    ) {
+      return this.BarangHilangService.create(dataData, file);
+    }
+
 
   @Get('getAll')
   async getAlls() {

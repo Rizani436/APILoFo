@@ -1,9 +1,10 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, UploadedFile, } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import {
   CreateBarangTemuanDto,
   UpdateBarangTemuanDto,
 } from './dto/barang-temuan';
+import { File as MulterFile } from 'multer';
 // import * as ExcelJS from 'exceljs';
 // import { Response } from 'express';
 // import * as fs from 'fs';
@@ -13,7 +14,8 @@ import {
 export class BarangTemuanService {
   private prisma = new PrismaClient();
 
-  async create(dataData: CreateBarangTemuanDto) {
+  async create(dataData: CreateBarangTemuanDto, file: MulterFile) {
+    const url = `http://localhost:3000/uploads/${file.filename}`;
     return this.prisma.barangTemuan.create({
       data: {
         uploader: dataData.userId,
@@ -24,7 +26,7 @@ export class BarangTemuanService {
         kotaKabupaten: dataData.kotaKabupaten,
         informasiDetail: dataData.informasiDetail,
         noHP: dataData.noHP,
-        pictUrl: dataData.pictUrl,
+        pictUrl: url,
         status: dataData.status,
         latitude: dataData.latitude,
         longitude: dataData.longitude,
@@ -95,6 +97,7 @@ export class BarangTemuanService {
     });
   }
 
+  
   // async importMerchant(file: MulterFile) {
   //   if (!file) {
   //     throw new HttpException('File tidak ditemukan', HttpStatus.NOT_FOUND);

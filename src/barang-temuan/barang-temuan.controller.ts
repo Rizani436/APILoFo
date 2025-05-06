@@ -14,10 +14,15 @@ import {
   Query,
 } from '@nestjs/common';
 import { BarangTemuanService } from './barang-temuan.service';
-import { CreateBarangTemuanDto, UpdateBarangTemuanDto } from './dto/barang-temuan';
+import {
+  CreateBarangTemuanDto,
+  UpdateBarangTemuanDto,
+} from './dto/barang-temuan';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerConfig } from '../config/multer.config';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 import { File as MulterFile } from 'multer';
 
 @Controller('barang-temuan')
@@ -25,11 +30,25 @@ export class BarangTemuanController {
   constructor(private readonly BarangTemuanService: BarangTemuanService) {}
 
   @Post('create')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const uniqueName = `${Date.now()}-${Math.round(
+            Math.random() * 1e9,
+          )}${extname(file.originalname)}`;
+          cb(null, uniqueName);
+        },
+      }),
+    }),
+  )
   async create(
+    @UploadedFile() file: MulterFile,
     @Body(new ValidationPipe({ whitelist: true }))
     dataData: CreateBarangTemuanDto,
   ) {
-    return this.BarangTemuanService.create(dataData);
+    return this.BarangTemuanService.create(dataData, file);
   }
 
   @Get('getAll')
@@ -56,20 +75,21 @@ export class BarangTemuanController {
     return this.BarangTemuanService.delete(id);
   }
 
-//   @Post('import')
-//   @UseInterceptors(FileInterceptor('file', multerConfig))
-//   async importMerchant(@UploadedFile() file: MulterFile) {
-//     return this.BarangTemuanService.importMerchant(file);
-//   }
-//   @Get('export')
-//   async exportMerchant(@Res() res: Response) {
-//     return this.BarangTemuanService.exportMerchant(res);
-//   }
-//   @Get('search')
-//   async searchMerchant(
-//     @Query('search') search: string,
-//     @Query('fields') fields: string,
-//   ) {
-//     return this.BarangTemuanService.searchMerchant(search, fields);
-//   }
+
+  //   @Post('import')
+  //   @UseInterceptors(FileInterceptor('file', multerConfig))
+  //   async importMerchant(@UploadedFile() file: MulterFile) {
+  //     return this.BarangTemuanService.importMerchant(file);
+  //   }
+  //   @Get('export')
+  //   async exportMerchant(@Res() res: Response) {
+  //     return this.BarangTemuanService.exportMerchant(res);
+  //   }
+  //   @Get('search')
+  //   async searchMerchant(
+  //     @Query('search') search: string,
+  //     @Query('fields') fields: string,
+  //   ) {
+  //     return this.BarangTemuanService.searchMerchant(search, fields);
+  //   }
 }
