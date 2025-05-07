@@ -30,7 +30,7 @@ export class BarangHilangController {
     @UseInterceptors(
       FileInterceptor('file', {
         storage: diskStorage({
-          destination: './uploads',
+          destination: './uploads/barang-hilang',
           filename: (req, file, cb) => {
             const uniqueName = `${Date.now()}-${Math.round(
               Math.random() * 1e9,
