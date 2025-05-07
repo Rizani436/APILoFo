@@ -50,6 +50,36 @@ export class BarangTemuanController {
   ) {
     return this.BarangTemuanService.create(dataData, file);
   }
+  @Post('upload')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const uniqueName = `${Date.now()}-${Math.round(
+            Math.random() * 1e9,
+          )}${extname(file.originalname)}`;
+          cb(null, uniqueName);
+        },
+      }),
+    }),
+  )
+  async uploadFile(
+    @UploadedFile() file: MulterFile,
+    @Body('nama') nama: string,
+  ) {
+    const url = `http://localhost:3000/uploads/${file.filename}`;
+
+    const data = {
+      nama: nama,
+      pictUrl: url,
+    };
+
+    return {
+      message: 'Upload & simpan data berhasil',
+      data,
+    };
+  }
 
   @Get('getAll')
   async getAll() {
