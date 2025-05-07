@@ -41,7 +41,7 @@ model BarangHilang {
   uploader         String
   namaBarang       String
   kategoriBarang   KategoriBarang
-  tanggalHilang DateTime
+  tanggalHilang String
   tempatHilang String
   kotaKabupaten    String
   informasiDetail  String
@@ -59,7 +59,7 @@ model BarangTemuan {
   uploader         String
   namaBarang       String
   kategoriBarang   KategoriBarang
-  tanggalTemuan  DateTime
+  tanggalTemuan  String
   tempatTemuan   String
   kotaKabupaten    String
   informasiDetail  String
