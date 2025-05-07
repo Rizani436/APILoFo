@@ -36,12 +36,12 @@ export class CreateBarangHilangDto {
   @IsNotEmpty()
   status: any;
 
+  @Type(() => Number)
   @IsNumber()
-  @IsNotEmpty()
   latitude: number;
 
+  @Type(() => Number)
   @IsNumber()
-  @IsNotEmpty()
   longitude: number;
 }
 
@@ -84,10 +84,12 @@ export class UpdateBarangHilangDto {
   @IsOptional()
   status?: any;
 
+  @Type(() => Number)
   @IsNumber()
   @IsOptional()
   latitude?: number;
 
+  @Type(() => Number)
   @IsNumber()
   @IsOptional()
   longitude?: number;
