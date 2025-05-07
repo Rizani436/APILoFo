@@ -33,10 +33,6 @@ export class CreateBarangTemuanDto {
   @IsNotEmpty()
   noHP: string;
 
-  @IsString()
-  @IsNotEmpty()
-  pictUrl: string;
-
   @IsNotEmpty()
   status: any;
 

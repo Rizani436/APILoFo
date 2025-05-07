@@ -33,10 +33,6 @@ export class CreateBarangHilangDto {
   @IsNotEmpty()
   noHP: string;
 
-  @IsString()
-  @IsNotEmpty()
-  pictUrl: string;
-
   @IsNotEmpty()
   status: any;
 

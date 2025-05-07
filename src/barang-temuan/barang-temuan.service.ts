@@ -15,7 +15,7 @@ export class BarangTemuanService {
   private prisma = new PrismaClient();
 
   async create(dataData: CreateBarangTemuanDto, file: MulterFile) {
-    const url = `http://localhost:3000/uploads/${file.filename}`;
+    const url = `https://backend-web-admin.onrender.com/uploads/${file.filename}`;
     return this.prisma.barangTemuan.create({
       data: {
         uploader: dataData.userId,

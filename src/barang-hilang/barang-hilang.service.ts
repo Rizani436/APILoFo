@@ -14,7 +14,7 @@ export class BarangHilangService {
   private prisma = new PrismaClient();
 
   async create(dataData: CreateBarangHilangDto, file: MulterFile) {
-    const url = `http://localhost:3000/uploads/${file.filename}`;
+    const url = `https://backend-web-admin.onrender.com/uploads/barang-hilang/${file.filename}`;
     return this.prisma.barangHilang.create({
       data: {
         uploader: dataData.userId,
