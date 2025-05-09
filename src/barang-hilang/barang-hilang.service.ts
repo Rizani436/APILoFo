@@ -95,6 +95,32 @@ export class BarangHilangService {
       },
     });
   }
+  async getMyAll(userId: string) {
+    const barangHilang = await this.prisma.barangHilang.findMany({
+      where: {
+        uploader: userId,
+      },
+    });
+    if (barangHilang.length == 0) {
+      throw new HttpException('barang hilang tidak ada', HttpStatus.NOT_FOUND);
+    }
+    return barangHilang;
+  }
+
+  async getOtherAll(userId: string) {
+    const barangHilang = await this.prisma.barangHilang.findMany({
+      where: {
+        NOT: {
+          uploader: userId,
+        },
+      },
+    });
+    if (barangHilang.length == 0) {
+      throw new HttpException('barang hilang tidak ada', HttpStatus.NOT_FOUND);
+    }
+    return barangHilang;
+  }
+
 
   // async importMerchant(file: MulterFile) {
   //   if (!file) {

@@ -73,6 +73,15 @@ export class BarangHilangController {
     return this.BarangHilangService.delete(id);
   }
 
+  @Get('getMyAll/:id')
+  async getMyAll(@Param('id') id: string) {
+    return this.BarangHilangService.getMyAll(id);
+  }
+  @Get('getOtherAll/:id')
+  async getOtherAll(@Param('id') id: string) {
+    return this.BarangHilangService.getOtherAll(id);
+  }
+
 //   @Post('import')
 //   @UseInterceptors(FileInterceptor('file', multerConfig))
 //   async import(@UploadedFile() file: MulterFile) {

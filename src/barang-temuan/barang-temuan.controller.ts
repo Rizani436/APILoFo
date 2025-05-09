@@ -75,6 +75,15 @@ export class BarangTemuanController {
     return this.BarangTemuanService.delete(id);
   }
 
+  @Get('getMyAll/:id')
+  async getMyAll(@Param('id') id: string) {
+    return this.BarangTemuanService.getMyAll(id);
+  }
+  @Get('getOtherAll/:id')
+  async getOtherAll(@Param('id') id: string) {
+    return this.BarangTemuanService.getOtherAll(id);
+  }
+
 
   //   @Post('import')
   //   @UseInterceptors(FileInterceptor('file', multerConfig))

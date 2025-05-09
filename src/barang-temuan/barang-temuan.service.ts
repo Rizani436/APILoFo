@@ -97,6 +97,32 @@ export class BarangTemuanService {
     });
   }
 
+  async getMyAll(userId: string) {
+    const barangTemuan = await this.prisma.barangTemuan.findMany({
+      where: {
+        uploader: userId,
+      },
+    });
+    if (barangTemuan.length == 0) {
+      throw new HttpException('barang temuan tidak ada', HttpStatus.NOT_FOUND);
+    }
+    return barangTemuan;
+  }
+
+  async getOtherAll(userId: string) {
+    const barangTemuan = await this.prisma.barangTemuan.findMany({
+      where: {
+        NOT: {
+          uploader: userId,
+        },
+      },
+    });
+    if (barangTemuan.length == 0) {
+      throw new HttpException('barang temuan tidak ada', HttpStatus.NOT_FOUND);
+    }
+    return barangTemuan;
+  }
+
   
   // async importMerchant(file: MulterFile) {
   //   if (!file) {
