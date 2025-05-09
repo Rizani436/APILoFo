@@ -112,6 +112,7 @@ export class BarangTemuanService {
   async getOtherAll(userId: string) {
     const barangTemuan = await this.prisma.barangTemuan.findMany({
       where: {
+        status: 'Diterima',
         NOT: {
           uploader: userId,
         },

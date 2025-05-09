@@ -110,6 +110,7 @@ export class BarangHilangService {
   async getOtherAll(userId: string) {
     const barangHilang = await this.prisma.barangHilang.findMany({
       where: {
+        status: 'Diterima',
         NOT: {
           uploader: userId,
         },
