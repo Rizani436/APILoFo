@@ -78,7 +78,7 @@ enum KategoriBarang {
   Aksesoris
   Kendaraan
   Elektronik
-  Documen
+  Dokumen
   DLL
 }
 

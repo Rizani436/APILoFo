@@ -57,6 +57,17 @@ export class BarangHilangService {
   }
 
   async update(id: string, dataData: UpdateBarangHilangDto) {
+    const barangHilang = await this.prisma.barangHilang.findUnique({
+      where: {
+        idBarangHilang: id,
+      },
+    });
+    if (!barangHilang) {
+      throw new HttpException(
+        'barang Hilang tidak ditemukan',
+        HttpStatus.NOT_FOUND,
+      );
+    }
     return this.prisma.barangHilang.update({
       where: { idBarangHilang: id },
       data: {
@@ -121,7 +132,6 @@ export class BarangHilangService {
     }
     return barangHilang;
   }
-
 
   // async importMerchant(file: MulterFile) {
   //   if (!file) {

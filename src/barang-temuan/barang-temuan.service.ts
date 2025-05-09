@@ -58,6 +58,17 @@ export class BarangTemuanService {
   }
 
   async update(id: string, dataData: UpdateBarangTemuanDto) {
+     const barangTemuan = await this.prisma.barangTemuan.findUnique({
+      where: {
+        idBarangTemuan: id,
+      },
+    });
+    if (!barangTemuan) {
+      throw new HttpException(
+        'barang temuan tidak ditemukan',
+        HttpStatus.NOT_FOUND,
+      );
+    }
     return this.prisma.barangTemuan.update({
       where: { idBarangTemuan: id },
       data: {
