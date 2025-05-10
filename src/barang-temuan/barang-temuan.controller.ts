@@ -24,6 +24,7 @@ import { multerConfig } from '../config/multer.config';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { File as MulterFile } from 'multer';
+import { KategoriBarang } from '@prisma/client';
 
 @Controller('barang-temuan')
 export class BarangTemuanController {
@@ -80,8 +81,8 @@ export class BarangTemuanController {
     return this.BarangTemuanService.getMyAll(id);
   }
   @Get('getOtherAll/:id')
-  async getOtherAll(@Param('id') id: string) {
-    return this.BarangTemuanService.getOtherAll(id);
+  async getOtherAll(@Param('id') id: string, @Body() KategoriBarang: any) {
+    return this.BarangTemuanService.getOtherAll(id, KategoriBarang);
   }
 
 

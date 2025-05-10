@@ -118,15 +118,37 @@ export class BarangHilangService {
     return barangHilang;
   }
 
-  async getOtherAll(userId: string) {
-    const barangHilang = await this.prisma.barangHilang.findMany({
-      where: {
-        status: 'Diterima',
-        NOT: {
-          uploader: userId,
+  async getOtherAll(userId: string, kategoriBarang: any) {
+    var barangHilang;
+    if (kategoriBarang == undefined) {
+      barangHilang = await this.prisma.barangHilang.findMany({
+        where: {
+          status: 'Diterima',
+          NOT: {
+            uploader: userId,
+          },
         },
-      },
-    });
+      });
+    } else if (kategoriBarang == 'all') {
+      barangHilang = await this.prisma.barangHilang.findMany({
+        where: {
+          status: 'Diterima',
+          NOT: {
+            uploader: userId,
+          },
+        },
+      });
+    } else {
+      barangHilang = await this.prisma.barangHilang.findMany({
+        where: {
+          status: 'Diterima',
+          NOT: {
+            uploader: userId,
+          },
+          kategoriBarang,
+        },
+      });
+    }
     if (barangHilang.length == 0) {
       throw new HttpException('barang hilang tidak ada', HttpStatus.NOT_FOUND);
     }

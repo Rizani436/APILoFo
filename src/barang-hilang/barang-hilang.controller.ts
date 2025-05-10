@@ -20,7 +20,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { multerConfig } from '../config/multer.config';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { File as MulterFile } from 'multer';;
+import { File as MulterFile } from 'multer';import { KategoriBarang } from '@prisma/client';
+;
 
 @Controller('barang-Hilang')
 export class BarangHilangController {
@@ -78,8 +79,8 @@ export class BarangHilangController {
     return this.BarangHilangService.getMyAll(id);
   }
   @Get('getOtherAll/:id')
-  async getOtherAll(@Param('id') id: string) {
-    return this.BarangHilangService.getOtherAll(id);
+  async getOtherAll(@Param('id') id: string, @Body() KategoriBarang: any) {
+    return this.BarangHilangService.getOtherAll(id, KategoriBarang);
   }
 
 //   @Post('import')

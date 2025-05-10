@@ -1,4 +1,9 @@
-import { Injectable, HttpException, HttpStatus, UploadedFile, } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  UploadedFile,
+} from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import {
   CreateBarangTemuanDto,
@@ -58,7 +63,7 @@ export class BarangTemuanService {
   }
 
   async update(id: string, dataData: UpdateBarangTemuanDto) {
-     const barangTemuan = await this.prisma.barangTemuan.findUnique({
+    const barangTemuan = await this.prisma.barangTemuan.findUnique({
       where: {
         idBarangTemuan: id,
       },
@@ -120,22 +125,43 @@ export class BarangTemuanService {
     return barangTemuan;
   }
 
-  async getOtherAll(userId: string) {
-    const barangTemuan = await this.prisma.barangTemuan.findMany({
-      where: {
-        status: 'Diterima',
-        NOT: {
-          uploader: userId,
+  async getOtherAll(userId: string, kategoriBarang: any) {
+    var barangTemuan;
+    if (kategoriBarang == undefined) {
+      barangTemuan = await this.prisma.barangHilang.findMany({
+        where: {
+          status: 'Diterima',
+          NOT: {
+            uploader: userId,
+          },
         },
-      },
-    });
+      });
+    } else if (kategoriBarang == 'all') {
+      barangTemuan = await this.prisma.barangTemuan.findMany({
+        where: {
+          status: 'Diterima',
+          NOT: {
+            uploader: userId,
+          },
+        },
+      });
+    } else {
+      barangTemuan = await this.prisma.barangTemuan.findMany({
+        where: {
+          status: 'Diterima',
+          NOT: {
+            uploader: userId,
+          },
+          kategoriBarang,
+        },
+      });
+    }
     if (barangTemuan.length == 0) {
       throw new HttpException('barang temuan tidak ada', HttpStatus.NOT_FOUND);
     }
     return barangTemuan;
   }
 
-  
   // async importMerchant(file: MulterFile) {
   //   if (!file) {
   //     throw new HttpException('File tidak ditemukan', HttpStatus.NOT_FOUND);
