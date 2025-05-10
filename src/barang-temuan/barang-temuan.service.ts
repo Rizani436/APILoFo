@@ -4,7 +4,7 @@ import {
   HttpStatus,
   UploadedFile,
 } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { KategoriBarang, PrismaClient } from '@prisma/client';
 import {
   CreateBarangTemuanDto,
   UpdateBarangTemuanDto,
@@ -125,40 +125,50 @@ export class BarangTemuanService {
     return barangTemuan;
   }
 
-  async getOtherAll(userId: string, kategoriBarang: any) {
-    var barangTemuan;
-    if (kategoriBarang == undefined) {
-      barangTemuan = await this.prisma.barangHilang.findMany({
-        where: {
-          status: 'Diterima',
-          NOT: {
-            uploader: userId,
-          },
-        },
-      });
-    } else if (kategoriBarang == 'all') {
+  async getOtherAll(userId: string, kategori: any) {
+    if (typeof kategori === 'object' && kategori !== null) {
+      kategori = kategori.kategoriBarang || '';
+    }
+
+    let barangTemuan;
+
+    if (!kategori || kategori === '') {
       barangTemuan = await this.prisma.barangTemuan.findMany({
         where: {
           status: 'Diterima',
-          NOT: {
-            uploader: userId,
-          },
+          NOT: { uploader: userId },
+        },
+      });
+    } else if (kategori === 'all') {
+      console.log('kategori adalah all');
+      barangTemuan = await this.prisma.barangTemuan.findMany({
+        where: {
+          status: 'Diterima',
+          NOT: { uploader: userId },
+        },
+      });
+    } else if (
+      kategori === 'Aksesoris' ||
+      kategori === 'Dokumen' ||
+      kategori === 'Elektronik' ||
+      kategori === 'Kendaraan' ||
+      kategori === 'DLL'
+    ) {
+      barangTemuan = await this.prisma.barangTemuan.findMany({
+        where: {
+          status: 'Diterima',
+          NOT: { uploader: userId },
+          kategoriBarang: kategori,
         },
       });
     } else {
-      barangTemuan = await this.prisma.barangTemuan.findMany({
-        where: {
-          status: 'Diterima',
-          NOT: {
-            uploader: userId,
-          },
-          kategoriBarang,
-        },
-      });
+      barangTemuan = '';
     }
-    if (barangTemuan.length == 0) {
+
+    if (!barangTemuan || barangTemuan.length === 0) {
       throw new HttpException('barang temuan tidak ada', HttpStatus.NOT_FOUND);
     }
+
     return barangTemuan;
   }
 

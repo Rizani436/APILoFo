@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { KategoriBarang, PrismaClient } from '@prisma/client';
 import {
   CreateBarangHilangDto,
   UpdateBarangHilangDto,
@@ -118,43 +118,52 @@ export class BarangHilangService {
     return barangHilang;
   }
 
-  async getOtherAll(userId: string, kategoriBarang: any) {
-    var barangHilang;
-    if (kategoriBarang == undefined) {
+  async getOtherAll(userId: string, kategori: any) {
+    if (typeof kategori === 'object' && kategori !== null) {
+      kategori = kategori.kategoriBarang || '';
+    }
+
+    let barangHilang;
+
+    if (!kategori || kategori === '') {
       barangHilang = await this.prisma.barangHilang.findMany({
         where: {
           status: 'Diterima',
-          NOT: {
-            uploader: userId,
-          },
+          NOT: { uploader: userId },
         },
       });
-    } else if (kategoriBarang == 'all') {
+    } else if (kategori === 'all') {
+      console.log('kategori adalah all');
       barangHilang = await this.prisma.barangHilang.findMany({
         where: {
           status: 'Diterima',
-          NOT: {
-            uploader: userId,
-          },
+          NOT: { uploader: userId },
+        },
+      });
+    } else if (
+      kategori === 'Aksesoris' ||
+      kategori === 'Dokumen' ||
+      kategori === 'Elektronik' ||
+      kategori === 'Kendaraan' ||
+      kategori === 'DLL'
+    ) {
+      barangHilang = await this.prisma.barangHilang.findMany({
+        where: {
+          status: 'Diterima',
+          NOT: { uploader: userId },
+          kategoriBarang: kategori,
         },
       });
     } else {
-      barangHilang = await this.prisma.barangHilang.findMany({
-        where: {
-          status: 'Diterima',
-          NOT: {
-            uploader: userId,
-          },
-          kategoriBarang,
-        },
-      });
+      barangHilang = '';
     }
-    if (barangHilang.length == 0) {
+
+    if (!barangHilang || barangHilang.length === 0) {
       throw new HttpException('barang hilang tidak ada', HttpStatus.NOT_FOUND);
     }
+
     return barangHilang;
   }
-
   // async importMerchant(file: MulterFile) {
   //   if (!file) {
   //     throw new HttpException('File tidak ditemukan', HttpStatus.NOT_FOUND);
