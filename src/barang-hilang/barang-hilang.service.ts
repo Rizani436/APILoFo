@@ -132,8 +132,7 @@ export class BarangHilangService {
           NOT: { uploader: userId },
         },
       });
-    } else if (kategori === 'all') {
-      console.log('kategori adalah all');
+    } else if (kategori === 'All') {
       barangHilang = await this.prisma.barangHilang.findMany({
         where: {
           status: 'Diterima',

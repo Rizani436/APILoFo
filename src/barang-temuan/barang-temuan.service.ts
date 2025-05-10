@@ -139,8 +139,7 @@ export class BarangTemuanService {
           NOT: { uploader: userId },
         },
       });
-    } else if (kategori === 'all') {
-      console.log('kategori adalah all');
+    } else if (kategori === 'All') {
       barangTemuan = await this.prisma.barangTemuan.findMany({
         where: {
           status: 'Diterima',
