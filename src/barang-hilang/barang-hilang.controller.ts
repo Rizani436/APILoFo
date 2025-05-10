@@ -79,8 +79,8 @@ export class BarangHilangController {
     return this.BarangHilangService.getMyAll(id);
   }
   @Get('getOtherAll/:id')
-  async getOtherAll(@Param('id') id: string, @Body() KategoriBarang: any) {
-    return this.BarangHilangService.getOtherAll(id, KategoriBarang);
+  async getOtherAll(@Param('id') id: string, @Query('kategoriBarang') kategori: string) {
+    return this.BarangHilangService.getOtherAll(id, kategori);
   }
 
 //   @Post('import')

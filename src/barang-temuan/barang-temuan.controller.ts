@@ -81,8 +81,8 @@ export class BarangTemuanController {
     return this.BarangTemuanService.getMyAll(id);
   }
   @Get('getOtherAll/:id')
-  async getOtherAll(@Param('id') id: string, @Body() KategoriBarang: any) {
-    return this.BarangTemuanService.getOtherAll(id, KategoriBarang);
+  async getOtherAll(@Param('id') id: string, @Query('kategoriBarang') kategori: string) {
+    return this.BarangTemuanService.getOtherAll(id, kategori);
   }
 
 
