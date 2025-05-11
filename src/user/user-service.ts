@@ -209,12 +209,12 @@ export class userService {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new HttpException(
-        'password saat ini tidak valid',
+        'Password lama salah',
         HttpStatus.BAD_REQUEST,
       );
     }
-    const isPasswordValidK = await bcrypt.compare(newPassword, confirmPassword);
-    if (!isPasswordValidK) {
+
+    if (newPassword !== confirmPassword) {
       throw new HttpException(
         'password baru dan konfirmasi password tidak sama',
         HttpStatus.BAD_REQUEST,
