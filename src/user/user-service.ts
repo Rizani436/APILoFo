@@ -149,17 +149,17 @@ export class userService {
     const existingUsername = await this.prisma.user.findFirst({
       where: { username: dataData.username },
     });
-    if (existingUser && existingUsername) {
+    if (existingUser && existingUsername&&dataData.username&&dataData.email) {
       throw new HttpException(
         'Username and Email sudah ada',
         HttpStatus.BAD_REQUEST,
       );
-    } else if (existingUsername) {
+    } else if (existingUsername&&dataData.username) {
       throw new HttpException(
         'Username sudah ada',
         HttpStatus.BAD_REQUEST,
       );
-    } else if (existingUser) {
+    } else if (existingUser&&dataData.email) {
       throw new HttpException('Email sudah ada', HttpStatus.BAD_REQUEST);
     }
     return this.prisma.user.update({
