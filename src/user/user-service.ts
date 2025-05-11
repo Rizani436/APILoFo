@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { MyRedisService } from '../my-redis/my-redis.module';
 import * as bcrypt from 'bcrypt';
 import { Http2ServerRequest } from 'http2';
+import { File as MulterFile } from 'multer';
 
 
 @Injectable()
@@ -142,6 +143,25 @@ export class userService {
   }
 
   async update(id: string, dataData: UpdateUserDto) {
+    const existingUser = await this.prisma.user.findFirst({
+      where: { email: dataData.email },
+    });
+    const existingUsername = await this.prisma.user.findFirst({
+      where: { username: dataData.username },
+    });
+    if (existingUser && existingUsername) {
+      throw new HttpException(
+        'Username and Email sudah ada',
+        HttpStatus.BAD_REQUEST,
+      );
+    } else if (existingUsername) {
+      throw new HttpException(
+        'Username sudah ada',
+        HttpStatus.BAD_REQUEST,
+      );
+    } else if (existingUser) {
+      throw new HttpException('Email sudah ada', HttpStatus.BAD_REQUEST);
+    }
     return this.prisma.user.update({
       where: { username: id },
       data: {
@@ -210,6 +230,16 @@ export class userService {
     });
 
     return { message: 'password berhasil diupdate' };
+  }
+
+  async changeProfile(id: string, file: MulterFile) {
+    const url = `https://backend-web-admin.onrender.com/uploads/profile/${file.filename}`;
+    return this.prisma.user.update({
+      where: { username: id },
+      data: {
+        pictUrl: url,
+      },
+    });
   }
 
   

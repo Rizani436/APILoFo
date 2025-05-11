@@ -8,11 +8,18 @@ import {
   Body,
   Res,
   HttpStatus,
-  ValidationPipe
+  ValidationPipe,
+  UseInterceptors,
+  UploadedFile
 } from '@nestjs/common';
 import { userService } from 'src/user/user-service';
 import { CreateUserDto, UpdateUserDto } from './dto/user';
 import { Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerConfig } from '../config/multer.config';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { File as MulterFile } from 'multer';
 import { PrismaClient } from '@prisma/client';
 
 @Controller('user')
@@ -78,6 +85,26 @@ export class userController {
   ) {
     return this.userService.changePassword(id, password, newPassword);
   }
+
+  @Put('change-profile/:id')
+    @UseInterceptors(
+      FileInterceptor('file', {
+        storage: diskStorage({
+          destination: './uploads/barang-hilang',
+          filename: (req, file, cb) => {
+            const uniqueName = `${Date.now()}-${Math.round(
+              Math.random() * 1e9,
+            )}${extname(file.originalname)}`;
+            cb(null, uniqueName);
+          },
+        }),
+      }),
+    )
+    async changeProfile(
+      @UploadedFile() file: MulterFile,  @Param('id') id: string,
+    ) {
+      return this.userService.changeProfile(id, file);
+    }
 
 
   // @Post('setRedis')
