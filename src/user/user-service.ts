@@ -197,7 +197,7 @@ export class userService {
     });
   }
 
-  async changePassword(id: string, password: string, newPassword: string) {
+  async changePassword(id: string, password: string, newPassword: string, confirmPassword: string) {
     const user = await this.prisma.user.findUnique({
       where: { username: id },
     });
@@ -210,6 +210,13 @@ export class userService {
     if (!isPasswordValid) {
       throw new HttpException(
         'password saat ini tidak valid',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const isPasswordValidK = await bcrypt.compare(newPassword, confirmPassword);
+    if (!isPasswordValidK) {
+      throw new HttpException(
+        'password baru dan konfirmasi password tidak sama',
         HttpStatus.BAD_REQUEST,
       );
     }

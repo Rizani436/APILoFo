@@ -82,8 +82,9 @@ export class userController {
     @Param('id') id: string,
     @Body('password') password: string,
     @Body('newPassword') newPassword: string,
+  @Body('confirmPassword') confirmPassword: string,
   ) {
-    return this.userService.changePassword(id, password, newPassword);
+    return this.userService.changePassword(id, password, newPassword, confirmPassword);
   }
 
   @Put('change-profile/:id')
