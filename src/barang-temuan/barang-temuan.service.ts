@@ -182,6 +182,49 @@ export class BarangTemuanService {
     return barangTemuan;
   }
 
+  async updatengambar(id: string, dataData: UpdateBarangTemuanDto, file: MulterFile) {
+      const barangTemuan = await this.prisma.barangTemuan.findUnique({
+        where: {
+          idBarangTemuan: id,
+        },
+      });
+      if (!barangTemuan) {
+        throw new HttpException(
+          'barang temuan tidak ditemukan',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      if (barangTemuan.pictUrl) {
+        const filename = barangTemuan.pictUrl.split('/').pop();
+        const filePath = `./uploads/barang-temuan/${filename}`;
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error('Error deleting file:', err);
+          } else {
+            console.log('File deleted successfully');
+          }
+        });
+      }
+      const url = `https://backend-web-admin.onrender.com/uploads/barang-temuan/${file.filename}`;
+      return this.prisma.barangTemuan.update({
+        where: { idBarangTemuan: id },
+        data: {
+          uploader: dataData.userId,
+          namaBarang: dataData.namaBarang,
+          kategoriBarang: dataData.kategoriBarang,
+          tanggalTemuan: dataData.tanggalTemuan,
+          tempatTemuan: dataData.tempatTemuan,
+          kotaKabupaten: dataData.kotaKabupaten,
+          informasiDetail: dataData.informasiDetail,
+          noHP: dataData.noHP,
+          pictUrl: url,
+          status: dataData.status,
+          latitude: dataData.latitude,
+          longitude: dataData.longitude,
+        },
+      });
+    }
+
   // async importMerchant(file: MulterFile) {
   //   if (!file) {
   //     throw new HttpException('File tidak ditemukan', HttpStatus.NOT_FOUND);

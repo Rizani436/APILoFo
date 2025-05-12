@@ -51,7 +51,7 @@ export class BarangTemuanController {
   ) {
     return this.BarangTemuanService.create(dataData, file);
   }
-  
+
   @Get('getAll')
   async getAll() {
     return this.BarangTemuanService.getAll();
@@ -81,10 +81,35 @@ export class BarangTemuanController {
     return this.BarangTemuanService.getMyAll(id);
   }
   @Get('getOtherAll/:id')
-  async getOtherAll(@Param('id') id: string, @Query('kategoriBarang') kategori: string) {
+  async getOtherAll(
+    @Param('id') id: string,
+    @Query('kategoriBarang') kategori: string,
+  ) {
     return this.BarangTemuanService.getOtherAll(id, kategori);
   }
 
+  @Put('updatengambar/:id')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/barang-hilang',
+        filename: (req, file, cb) => {
+          const uniqueName = `${Date.now()}-${Math.round(
+            Math.random() * 1e9,
+          )}${extname(file.originalname)}`;
+          cb(null, uniqueName);
+        },
+      }),
+    }),
+  )
+  async updatengambar(
+    @Param('id') id: string,
+    @UploadedFile() file: MulterFile,
+    @Body(new ValidationPipe({ whitelist: true }))
+    dataData: UpdateBarangTemuanDto,
+  ) {
+    return this.BarangTemuanService.updatengambar(id, dataData, file);
+  }
 
   //   @Post('import')
   //   @UseInterceptors(FileInterceptor('file', multerConfig))

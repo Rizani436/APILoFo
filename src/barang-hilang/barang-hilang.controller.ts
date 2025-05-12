@@ -14,41 +14,42 @@ import {
   Query,
 } from '@nestjs/common';
 import { BarangHilangService } from './barang-hilang.service';
-import { CreateBarangHilangDto, UpdateBarangHilangDto } from './dto/barang-hilang';
+import {
+  CreateBarangHilangDto,
+  UpdateBarangHilangDto,
+} from './dto/barang-hilang';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerConfig } from '../config/multer.config';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { File as MulterFile } from 'multer';import { KategoriBarang } from '@prisma/client';
-;
-
+import { File as MulterFile } from 'multer';
+import { KategoriBarang } from '@prisma/client';
 @Controller('barang-Hilang')
 export class BarangHilangController {
   constructor(private readonly BarangHilangService: BarangHilangService) {}
 
   @Post('create')
-    @UseInterceptors(
-      FileInterceptor('file', {
-        storage: diskStorage({
-          destination: './uploads/barang-hilang',
-          filename: (req, file, cb) => {
-            const uniqueName = `${Date.now()}-${Math.round(
-              Math.random() * 1e9,
-            )}${extname(file.originalname)}`;
-            cb(null, uniqueName);
-          },
-        }),
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/barang-hilang',
+        filename: (req, file, cb) => {
+          const uniqueName = `${Date.now()}-${Math.round(
+            Math.random() * 1e9,
+          )}${extname(file.originalname)}`;
+          cb(null, uniqueName);
+        },
       }),
-    )
-    async create(
-      @UploadedFile() file: MulterFile,
-      @Body(new ValidationPipe({ whitelist: true }))
-      dataData: CreateBarangHilangDto,
-    ) {
-      return this.BarangHilangService.create(dataData, file);
-    }
-
+    }),
+  )
+  async create(
+    @UploadedFile() file: MulterFile,
+    @Body(new ValidationPipe({ whitelist: true }))
+    dataData: CreateBarangHilangDto,
+  ) {
+    return this.BarangHilangService.create(dataData, file);
+  }
 
   @Get('getAll')
   async getAlls() {
@@ -69,6 +70,29 @@ export class BarangHilangController {
     return this.BarangHilangService.update(id, dataData);
   }
 
+  @Put('updatengambar/:id')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/barang-hilang',
+        filename: (req, file, cb) => {
+          const uniqueName = `${Date.now()}-${Math.round(
+            Math.random() * 1e9,
+          )}${extname(file.originalname)}`;
+          cb(null, uniqueName);
+        },
+      }),
+    }),
+  )
+  async updatengambar(
+    @Param('id') id: string,
+    @UploadedFile() file: MulterFile,
+    @Body(new ValidationPipe({ whitelist: true }))
+    dataData: UpdateBarangHilangDto,
+  ) {
+    return this.BarangHilangService.updatengambar(id, dataData, file);
+  }
+
   @Delete('delete/:id')
   async delete(@Param('id') id: string) {
     return this.BarangHilangService.delete(id);
@@ -79,24 +103,27 @@ export class BarangHilangController {
     return this.BarangHilangService.getMyAll(id);
   }
   @Get('getOtherAll/:id')
-  async getOtherAll(@Param('id') id: string, @Query('kategoriBarang') kategori: string) {
+  async getOtherAll(
+    @Param('id') id: string,
+    @Query('kategoriBarang') kategori: string,
+  ) {
     return this.BarangHilangService.getOtherAll(id, kategori);
   }
 
-//   @Post('import')
-//   @UseInterceptors(FileInterceptor('file', multerConfig))
-//   async import(@UploadedFile() file: MulterFile) {
-//     return this.BarangHilangService.import(file);
-//   }
-//   @Get('export')
-//   async export(@Res() res: Response) {
-//     return this.BarangHilangService.export(res);
-//   }
-//   @Get('search')
-//   async search(
-//     @Query('search') search: string,
-//     @Query('fields') fields: string,
-//   ) {
-//     return this.BarangHilangService.search(search, fields);
-//   }
+  //   @Post('import')
+  //   @UseInterceptors(FileInterceptor('file', multerConfig))
+  //   async import(@UploadedFile() file: MulterFile) {
+  //     return this.BarangHilangService.import(file);
+  //   }
+  //   @Get('export')
+  //   async export(@Res() res: Response) {
+  //     return this.BarangHilangService.export(res);
+  //   }
+  //   @Get('search')
+  //   async search(
+  //     @Query('search') search: string,
+  //     @Query('fields') fields: string,
+  //   ) {
+  //     return this.BarangHilangService.search(search, fields);
+  //   }
 }
