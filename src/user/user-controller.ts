@@ -91,7 +91,7 @@ export class userController {
     @UseInterceptors(
       FileInterceptor('file', {
         storage: diskStorage({
-          destination: './uploads/barang-hilang',
+          destination: './uploads/userProfile',
           filename: (req, file, cb) => {
             const uniqueName = `${Date.now()}-${Math.round(
               Math.random() * 1e9,
@@ -106,6 +106,13 @@ export class userController {
     ) {
       return this.userService.changeProfile(id, file);
     }
+
+    @Put('delete-profile/:id')
+    async deleteProfile(@Param('id') id: string) {
+      return this.userService.deleteProfile(id);
+    }
+
+    
 
 
   // @Post('setRedis')

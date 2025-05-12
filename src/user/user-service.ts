@@ -6,6 +6,7 @@ import { MyRedisService } from '../my-redis/my-redis.module';
 import * as bcrypt from 'bcrypt';
 import { Http2ServerRequest } from 'http2';
 import { File as MulterFile } from 'multer';
+import * as fs from 'fs';
 
 
 @Injectable()
@@ -189,6 +190,17 @@ export class userService {
         HttpStatus.NOT_FOUND,
       );
     }
+     if (user.pictUrl) {
+      const filename = user.pictUrl.split('/').pop();
+      const filePath = `./uploads/userProfile/${filename}`;
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error deleting file:', err);
+        } else {
+          console.log('File deleted successfully');
+        }
+      });
+    }
 
     return this.prisma.user.delete({
       where: {
@@ -240,11 +252,54 @@ export class userService {
   }
 
   async changeProfile(id: string, file: MulterFile) {
-    const url = `https://backend-web-admin.onrender.com/uploads/profile/${file.filename}`;
+    const user = await this.prisma.user.findUnique({
+      where: { username: id },
+    });
+    if (!user) {
+      throw new HttpException('user tidak ditemukan', HttpStatus.NOT_FOUND);
+    }
+    if (user.pictUrl) {
+      const filename = user.pictUrl.split('/').pop();
+      const filePath = `./uploads/userProfile/${filename}`;
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error deleting file:', err);
+        } else {
+          console.log('File deleted successfully');
+        }
+      });
+    }
+    const url = `https://backend-web-admin.onrender.com/uploads/userProfile/${file.filename}`;
     return this.prisma.user.update({
       where: { username: id },
       data: {
         pictUrl: url,
+      },
+    });
+  }
+
+  async deleteProfile(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { username: id },
+    });
+    if (!user) {
+      throw new HttpException('user tidak ditemukan', HttpStatus.NOT_FOUND);
+    }
+    if (user.pictUrl) {
+      const filename = user.pictUrl.split('/').pop();
+      const filePath = `./uploads/userProfile/${filename}`;
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error deleting file:', err);
+        } else {
+          console.log('File deleted successfully');
+        }
+      });
+    }
+    return this.prisma.user.update({
+      where: { username: id },
+      data: {
+        pictUrl: "profile/kosong.jpg",
       },
     });
   }

@@ -6,7 +6,7 @@ import {
 } from './dto/barang-hilang';
 // import * as ExcelJS from 'exceljs';
 // import { Response } from 'express';
-// import * as fs from 'fs';
+import * as fs from 'fs';
 import { File as MulterFile } from 'multer';
 
 @Injectable()
@@ -98,6 +98,17 @@ export class BarangHilangService {
         'barang Hilang tidak ditemukan',
         HttpStatus.NOT_FOUND,
       );
+    }
+    if (barangHilang.pictUrl) {
+      const filename = barangHilang.pictUrl.split('/').pop();
+      const filePath = `./uploads/barang-hilang/${filename}`;
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error deleting file:', err);
+        } else {
+          console.log('File deleted successfully');
+        }
+      });
     }
 
     return this.prisma.barangHilang.delete({

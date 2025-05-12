@@ -12,7 +12,7 @@ import {
 import { File as MulterFile } from 'multer';
 // import * as ExcelJS from 'exceljs';
 // import { Response } from 'express';
-// import * as fs from 'fs';
+import * as fs from 'fs';
 // import { File as MulterFile } from 'multer';
 
 @Injectable()
@@ -104,6 +104,17 @@ export class BarangTemuanService {
         'barang temuan tidak ditemukan',
         HttpStatus.NOT_FOUND,
       );
+    }
+    if (barangTemuan.pictUrl) {
+      const filename = barangTemuan.pictUrl.split('/').pop();
+      const filePath = `./uploads/barang-temuan/${filename}`;
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error deleting file:', err);
+        } else {
+          console.log('File deleted successfully');
+        }
+      });
     }
 
     return this.prisma.barangTemuan.delete({
