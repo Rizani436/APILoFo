@@ -218,6 +218,33 @@ export class BarangHilangService {
       },
     });
   }
+
+  async updateGambar(id: string, file: MulterFile) {
+          const barangHilang = await this.prisma.barangHilang.findUnique({
+            where: { idBarangHilang: id },
+          });
+          if (!barangHilang) {
+            throw new HttpException('barang hilang tidak ditemukan', HttpStatus.NOT_FOUND);
+          }
+          if (barangHilang.pictUrl) {
+            const filename = barangHilang.pictUrl.split('/').pop();
+            const filePath = `./uploads/barang-hilang/${filename}`;
+            fs.unlink(filePath, (err) => {
+              if (err) {
+                console.error('Error deleting file:', err);
+              } else {
+                console.log('File deleted successfully');
+              }
+            });
+          }
+          const url = `https://backend-web-admin.onrender.com/uploads/barang-hilang/${file.filename}`;
+          return this.prisma.user.update({
+            where: { username: id },
+            data: {
+              pictUrl: url,
+            },
+          });
+        }
   // async importMerchant(file: MulterFile) {
   //   if (!file) {
   //     throw new HttpException('File tidak ditemukan', HttpStatus.NOT_FOUND);

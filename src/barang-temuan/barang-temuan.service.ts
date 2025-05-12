@@ -225,6 +225,33 @@ export class BarangTemuanService {
       });
     }
 
+    async updateGambar(id: string, file: MulterFile) {
+        const barangTemuan = await this.prisma.barangTemuan.findUnique({
+          where: { idBarangTemuan: id },
+        });
+        if (!barangTemuan) {
+          throw new HttpException('barang temuan tidak ditemukan', HttpStatus.NOT_FOUND);
+        }
+        if (barangTemuan.pictUrl) {
+          const filename = barangTemuan.pictUrl.split('/').pop();
+          const filePath = `./uploads/barang-temuan/${filename}`;
+          fs.unlink(filePath, (err) => {
+            if (err) {
+              console.error('Error deleting file:', err);
+            } else {
+              console.log('File deleted successfully');
+            }
+          });
+        }
+        const url = `https://backend-web-admin.onrender.com/uploads/barang-temuan/${file.filename}`;
+        return this.prisma.user.update({
+          where: { username: id },
+          data: {
+            pictUrl: url,
+          },
+        });
+      }
+
   // async importMerchant(file: MulterFile) {
   //   if (!file) {
   //     throw new HttpException('File tidak ditemukan', HttpStatus.NOT_FOUND);

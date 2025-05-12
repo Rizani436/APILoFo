@@ -88,28 +88,25 @@ export class BarangTemuanController {
     return this.BarangTemuanService.getOtherAll(id, kategori);
   }
 
-  @Put('updatengambar/:id')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './uploads/barang-hilang',
-        filename: (req, file, cb) => {
-          const uniqueName = `${Date.now()}-${Math.round(
-            Math.random() * 1e9,
-          )}${extname(file.originalname)}`;
-          cb(null, uniqueName);
-        },
+  @Put('update-gambar/:id')
+    @UseInterceptors(
+      FileInterceptor('file', {
+        storage: diskStorage({
+          destination: './uploads/barang-temuan',
+          filename: (req, file, cb) => {
+            const uniqueName = `${Date.now()}-${Math.round(
+              Math.random() * 1e9,
+            )}${extname(file.originalname)}`;
+            cb(null, uniqueName);
+          },
+        }),
       }),
-    }),
-  )
-  async updatengambar(
-    @Param('id') id: string,
-    @UploadedFile() file: MulterFile,
-    @Body(new ValidationPipe({ whitelist: true }))
-    dataData: UpdateBarangTemuanDto,
-  ) {
-    return this.BarangTemuanService.updatengambar(id, dataData, file);
-  }
+    )
+    async updateGambar(
+      @UploadedFile() file: MulterFile,  @Param('id') id: string,
+    ) {
+      return this.BarangTemuanService.updateGambar(id, file);
+    }
 
   //   @Post('import')
   //   @UseInterceptors(FileInterceptor('file', multerConfig))
