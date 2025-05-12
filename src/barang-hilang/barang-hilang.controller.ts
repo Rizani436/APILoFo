@@ -70,7 +70,7 @@ export class BarangHilangController {
     return this.BarangHilangService.update(id, dataData);
   }
 
-  @Put('updatengambar/:id')
+  @Put('update-gambar/:id')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -84,13 +84,11 @@ export class BarangHilangController {
       }),
     }),
   )
-  async updatengambar(
-    @Param('id') id: string,
+  async updateGambar(
     @UploadedFile() file: MulterFile,
-    @Body(new ValidationPipe({ whitelist: true }))
-    dataData: UpdateBarangHilangDto,
+    @Param('id') id: string,
   ) {
-    return this.BarangHilangService.updatengambar(id, dataData, file);
+    return this.BarangHilangService.updateGambar(id, file);
   }
 
   @Delete('delete/:id')
