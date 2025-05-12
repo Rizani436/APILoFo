@@ -238,8 +238,8 @@ export class BarangHilangService {
             });
           }
           const url = `https://backend-web-admin.onrender.com/uploads/barang-hilang/${file.filename}`;
-          return this.prisma.user.update({
-            where: { username: id },
+          return this.prisma.barangHilang.update({
+            where: { idBarangHilang: id },
             data: {
               pictUrl: url,
             },

@@ -244,8 +244,8 @@ export class BarangTemuanService {
           });
         }
         const url = `https://backend-web-admin.onrender.com/uploads/barang-temuan/${file.filename}`;
-        return this.prisma.user.update({
-          where: { username: id },
+        return this.prisma.barangTemuan.update({
+          where: { idBarangTemuan: id },
           data: {
             pictUrl: url,
           },
