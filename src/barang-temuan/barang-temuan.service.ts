@@ -194,7 +194,7 @@ export class BarangTemuanService {
           HttpStatus.NOT_FOUND,
         );
       }
-      if (barangTemuan.pictUrl) {
+      if (barangTemuan.pictUrl&&barangTemuan.pictUrl !== dataData.pictUrl) {
         const filename = barangTemuan.pictUrl.split('/').pop();
         const filePath = `./uploads/barang-temuan/${filename}`;
         fs.unlink(filePath, (err) => {

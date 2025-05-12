@@ -187,7 +187,7 @@ export class BarangHilangService {
         HttpStatus.NOT_FOUND,
       );
     }
-    if (barangHilang.pictUrl) {
+    if (barangHilang.pictUrl&&barangHilang.pictUrl !== dataData.pictUrl) {
       const filename = barangHilang.pictUrl.split('/').pop();
       const filePath = `./uploads/barang-hilang/${filename}`;
       fs.unlink(filePath, (err) => {
@@ -198,6 +198,7 @@ export class BarangHilangService {
         }
       });
     }
+    console.log(dataData.pictUrl??'');
     const url = `https://backend-web-admin.onrender.com/uploads/barang-hilang/${file.filename}`;
     return this.prisma.barangHilang.update({
       where: { idBarangHilang: id },
