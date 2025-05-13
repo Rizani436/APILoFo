@@ -56,6 +56,14 @@ export class JawabanPertanyaanController {
     return this.JawabanPertanyaanService.delete(id);
   }
 
+  @Get('getMyAll/:Penanya/:IdBarangTemuan')
+  async getMyAll(
+    @Param('Penanya') Penanya: string,
+    @Param('IdBarangTemuan') IdBarangTemuan: string,
+  ) {
+    return this.JawabanPertanyaanService.getMyAll(Penanya, IdBarangTemuan);
+  }
+
 //   @Post('import')
 //   @UseInterceptors(FileInterceptor('file', multerConfig))
 //   async importMerchant(@UploadedFile() file: MulterFile) {

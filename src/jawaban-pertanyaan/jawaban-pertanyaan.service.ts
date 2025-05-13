@@ -53,16 +53,30 @@ export class JawabanPertanyaanService {
   async getMyAll(Penanya : String, IdBarangTemuan : String) {
     const penanya = String(Penanya); 
     const idBarangTemuan = String(IdBarangTemuan);
-    const jawabanPertanyaan = await this.prisma.jawabanPertanyaan.findMany({
+    var jawabanPertanyaan = await this.prisma.jawabanPertanyaan.findMany({
       where: {
         penanya,
         idBarangTemuan
       },
     });
+    let user
     if (jawabanPertanyaan.length == 0) {
       throw new HttpException('Jawaban/Pertanyaan tidak ada', HttpStatus.NOT_FOUND);
     }
-    return jawabanPertanyaan;
+
+    return Promise.all(jawabanPertanyaan.map(async (jp) => {
+      user = await this.prisma.user.findUnique({
+        where: {
+          username: jp.penjawab,
+        },
+      });
+      console.log(user);
+      return {
+        ...jp,
+        alamat: user.alamat,
+        namaLengkap: user.namaLengkap,
+      };
+    }));
   }
 
   async getById(id: number) {
@@ -109,6 +123,7 @@ export class JawabanPertanyaanService {
       );
     }
 
+    
     return this.prisma.jawabanPertanyaan.delete({
       where: {
         idJawabanPertanyaan: idNumber,
