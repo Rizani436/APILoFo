@@ -14,6 +14,23 @@ export class JawabanPertanyaanService {
   private prisma = new PrismaClient();
 
   async create(dataData: CreateJawabanPertanyaanDto) {
+    const existingJawabanPertanyaan = await this.prisma.jawabanPertanyaan.findFirst({
+      where: {
+        idBarangTemuan: dataData.idBarangTemuan,
+        penjawab: dataData.penjawab,
+      },
+    });
+    if (existingJawabanPertanyaan) {
+      const idNumber = Number(existingJawabanPertanyaan.idBarangTemuan);
+      return this.prisma.jawabanPertanyaan.update({
+        where: {
+          idJawabanPertanyaan: idNumber,
+        },
+        data: {
+          jawaban: dataData.jawaban,
+        },
+      });
+    }
     return this.prisma.jawabanPertanyaan.create({
       data: {
         idBarangTemuan: dataData.idBarangTemuan,
@@ -33,7 +50,23 @@ export class JawabanPertanyaanService {
     return jawabanPertanyaan;
   }
 
+  async getMyAll(Penanya : String, IdBarangTemuan : String) {
+    const penanya = String(Penanya); 
+    const idBarangTemuan = String(IdBarangTemuan);
+    const jawabanPertanyaan = await this.prisma.jawabanPertanyaan.findMany({
+      where: {
+        penanya,
+        idBarangTemuan
+      },
+    });
+    if (jawabanPertanyaan.length == 0) {
+      throw new HttpException('Jawaban/Pertanyaan tidak ada', HttpStatus.NOT_FOUND);
+    }
+    return jawabanPertanyaan;
+  }
+
   async getById(id: number) {
+    const idNumber = Number(id);
     const jawabanPertanyaan = await this.prisma.jawabanPertanyaan.findUnique({
       where: {
         idJawabanPertanyaan: id,
@@ -49,6 +82,7 @@ export class JawabanPertanyaanService {
   }
 
   async update(id: number, dataData: UpdateJawabanPertanyaanDto) {
+    const idNumber = Number(id);
     return this.prisma.jawabanPertanyaan.update({
       where: { idJawabanPertanyaan: id },
       data: {
@@ -62,9 +96,10 @@ export class JawabanPertanyaanService {
   }
 
   async delete(id: number) {
+    const idNumber = Number(id);
     const jawabanPertanyaan = await this.prisma.jawabanPertanyaan.findUnique({
       where: {
-        idJawabanPertanyaan: id,
+        idJawabanPertanyaan: idNumber,
       },
     });
     if (!jawabanPertanyaan) {
@@ -76,7 +111,7 @@ export class JawabanPertanyaanService {
 
     return this.prisma.jawabanPertanyaan.delete({
       where: {
-        idJawabanPertanyaan: id,
+        idJawabanPertanyaan: idNumber,
       },
     });
   }
