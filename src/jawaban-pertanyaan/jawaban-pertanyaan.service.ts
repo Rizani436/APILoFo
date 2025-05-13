@@ -21,7 +21,7 @@ export class JawabanPertanyaanService {
       },
     });
     if (existingJawabanPertanyaan) {
-      const idNumber = Number(existingJawabanPertanyaan.idBarangTemuan);
+      const idNumber = Number(existingJawabanPertanyaan.idJawabanPertanyaan);
       return this.prisma.jawabanPertanyaan.update({
         where: {
           idJawabanPertanyaan: idNumber,
