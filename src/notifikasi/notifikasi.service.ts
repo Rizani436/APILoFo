@@ -29,11 +29,10 @@ export class NotifikasiService {
     return notifikasi;
   }
 
-  async getMyAll(id: number) {
-    const idNumber = Number(id);
+  async getMyAll(id: string) {
     const notifikasi = await this.prisma.notifikasi.findMany({
       where: {
-        notification_id: idNumber,
+        idUser: id,
       },
     });
     if (notifikasi.length == 0) {

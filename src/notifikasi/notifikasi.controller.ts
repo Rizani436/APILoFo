@@ -43,7 +43,7 @@ export class NotifikasiController {
   }
 
   @Get('getMyAll/:id')
-  async getMyAll(@Param('id') id: number) {
+  async getMyAll(@Param('id') id: string) {
     return this.NotifikasiService.getMyAll(id);
   }
 
