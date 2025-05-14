@@ -1,9 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import {
-  CreateNotifikasiDTO,
-  UpdateNotifikasiDTO,
-} from './dto/notifikasi';
+import { CreateNotifikasiDTO, UpdateNotifikasiDTO } from './dto/notifikasi';
 // import * as ExcelJS from 'exceljs';
 // import { Response } from 'express';
 // import * as fs from 'fs';
@@ -32,12 +29,45 @@ export class NotifikasiService {
     return notifikasi;
   }
 
-  async getById(id: number) {
-    const notifikasi = await this.prisma.notifikasi.findUnique({
+  async getMyAll(id: number) {
+    const idNumber = Number(id);
+    const notifikasi = await this.prisma.notifikasi.findMany({
       where: {
-        notification_id: id,
+        notification_id: idNumber,
       },
     });
+    if (notifikasi.length == 0) {
+      throw new HttpException('notifikasi tidak ada', HttpStatus.NOT_FOUND);
+    }
+
+    return Promise.all(
+      notifikasi.map(async (notif) => {
+        if (notif.pesanNotifikasi == 'Telah menolak klaim barang Anda') {
+          notif = await this.prisma.notifikasi.update({
+            where: {
+              notification_id: notif.notification_id,
+            },
+            data: {
+              read: 'sudahDibaca',
+            },
+          });
+        }
+
+        return {
+          ...notif,
+        };
+      }),
+    );
+  }
+
+  async getById(id: number) {
+    const idNumber = Number(id);
+    const notifikasi = await this.prisma.notifikasi.findUnique({
+      where: {
+        notification_id: idNumber,
+      },
+    });
+
     if (!notifikasi) {
       throw new HttpException(
         'notifikasi tidak ditemukan',
@@ -48,8 +78,9 @@ export class NotifikasiService {
   }
 
   async update(id: number, dataData: UpdateNotifikasiDTO) {
-    return this.prisma.notifikasi.update({
-      where: { notification_id: id },
+    const idNumber = Number(id);
+    const notif =  this.prisma.notifikasi.update({
+      where: { notification_id: idNumber },
       data: {
         idUser: dataData.idUser,
         idBarangTemuan: dataData.idBarangTemuan,
@@ -57,12 +88,26 @@ export class NotifikasiService {
         read: dataData.read,
       },
     });
+    if (!notif) {
+      throw new HttpException(
+        'notifikasi tidak ditemukan',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const barangTemuan = await this.prisma.barangTemuan.findUnique({
+      where: {
+        idBarangTemuan: (await notif).idBarangTemuan,
+      },
+    });
+
+    return barangTemuan;
   }
 
   async delete(id: number) {
+    const idNumber = Number(id);
     const notifikasi = await this.prisma.notifikasi.findUnique({
       where: {
-        notification_id: id,
+        notification_id: idNumber,
       },
     });
     if (!notifikasi) {
@@ -74,7 +119,7 @@ export class NotifikasiService {
 
     return this.prisma.notifikasi.delete({
       where: {
-        notification_id: id,
+        notification_id: idNumber,
       },
     });
   }

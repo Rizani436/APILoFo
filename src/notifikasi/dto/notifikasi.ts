@@ -15,7 +15,7 @@ export class CreateNotifikasiDTO {
   @IsNotEmpty()
   pesanNotifikasi: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   read: any;
 
 }
