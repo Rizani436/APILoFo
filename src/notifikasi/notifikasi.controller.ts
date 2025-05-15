@@ -46,6 +46,10 @@ export class NotifikasiController {
   async getMyAll(@Param('id') id: string) {
     return this.NotifikasiService.getMyAll(id);
   }
+  @Get('getMyAllNoRead/:id')
+  async getMyAllNoRead(@Param('id') id: string) {
+    return this.NotifikasiService.getMyAllNoRead(id);
+  }
 
   @Put('update/:id')
   async update(

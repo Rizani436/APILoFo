@@ -58,6 +58,18 @@ export class NotifikasiService {
       }),
     );
   }
+  async getMyAllNoRead(id: string) {
+    const notifikasi = await this.prisma.notifikasi.findMany({
+      where: {
+        idUser: id,
+        read: 'belumDibaca',
+      },
+    });
+    if (notifikasi.length == 0) {
+      throw new HttpException('notifikasi tidak ada', HttpStatus.NOT_FOUND);
+    }
+    return notifikasi.length;
+  }
 
   async getById(id: number) {
     const idNumber = Number(id);
