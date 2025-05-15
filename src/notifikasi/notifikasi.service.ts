@@ -66,7 +66,7 @@ export class NotifikasiService {
       },
     });
     if (notifikasi.length == 0) {
-      throw new HttpException('notifikasi tidak ada', HttpStatus.NOT_FOUND);
+      return 0;
     }
     return notifikasi.length;
   }
