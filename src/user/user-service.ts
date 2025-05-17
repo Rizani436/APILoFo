@@ -318,7 +318,7 @@ async sendResetCode(email: string) {
   if (!user) throw new NotFoundException('User tidak ditemukan');
 
   const kode = Math.floor(100000 + Math.random() * 900000).toString(); // contoh kode 6 digit
-  await this.setCode(user.email, kode, 300 ); // expire dalam 5 menit
+  await this.setCode(user.email, kode, 120 ); // expire dalam 2 menit
 
   // kirim via email (gunakan nodemailer atau mailgun/sendgrid)
   await this.mailService.sendResetCodeEmail(email, kode);

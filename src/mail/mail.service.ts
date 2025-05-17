@@ -18,7 +18,12 @@ export class MailService {
       to,
       subject: 'Kode Reset Password',
       text: `Kode verifikasi reset password Anda adalah: ${code}`,
-      html: `<p>Kode verifikasi reset password Anda adalah:</p><h2>${code}</h2>`,
+      html: `<p>Kode verifikasi reset password Anda adalah:</p><h2>${code}</h2>
+      <p> Berlaku selama 2 menit.</p>
+      <p>Jika Anda tidak merasa melakukan permintaan ini, abaikan email ini.</p>
+      <p>Terima kasih,</p>
+      <p>Tim LostNFound</p>
+      `,
     };
 
     try {
