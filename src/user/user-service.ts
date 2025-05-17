@@ -368,14 +368,6 @@ async sendResetCode(email: string) {
       );
     }
 
-    const isSamePassword = await bcrypt.compare(newPassword, user.password);
-    if (isSamePassword) {
-      throw new HttpException(
-        'password baru tidak boleh sama dengan password saat ini',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     await this.prisma.user.update({
