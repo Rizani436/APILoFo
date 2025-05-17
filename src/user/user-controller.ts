@@ -112,6 +112,30 @@ export class userController {
       return this.userService.deleteProfile(id);
     }
 
+    // auth.controller.ts
+  @Post('forgot-password')
+  async forgotPassword(@Body('email') email: string) {
+    return this.userService.sendResetCode(email);
+  }
+
+  @Post('confirm-reset-code')
+  async confirmResetCode(
+    @Body('email') email: string,
+    @Body('resetCode') resetCode: string,
+  ) {
+    return this.userService.confirmResetCode(email, resetCode);
+  }
+
+  @Put('reset-password')
+  async resetPassword(
+    @Body('email') email: string,
+    @Body('newPassword') newPassword: string,
+    @Body('confirmPassword') confirmPassword: string,
+  ) {
+    return this.userService.resetPassword(email, newPassword, confirmPassword);
+  }
+
+
     
 
 

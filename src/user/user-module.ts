@@ -2,6 +2,7 @@ import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/c
 import { userService } from 'src/user/user-service';
 import { userController } from 'src/user/user-controller';
 import { JwtModule } from '@nestjs/jwt';
+import { MailModule } from '../mail/mail.module'; // sesuaikan path
 import { MyRedisModule } from 'src/my-redis/my-redis.module';
 
 
@@ -12,7 +13,9 @@ import { MyRedisModule } from 'src/my-redis/my-redis.module';
         signOptions: { expiresIn: '1h' },
       }),
       MyRedisModule,
+      MailModule,
     ],
+    
   controllers: [userController],
   providers: [userService],
 })

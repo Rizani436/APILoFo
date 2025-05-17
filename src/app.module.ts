@@ -22,6 +22,9 @@ import { NotifikasiController } from './notifikasi/notifikasi.controller';
 import { NotifikasiService } from './notifikasi/notifikasi.service';
 import { JawabanPertanyaanController } from './jawaban-pertanyaan/jawaban-pertanyaan.controller';
 import { JawabanPertanyaanService } from './jawaban-pertanyaan/jawaban-pertanyaan.service';
+import { MailController } from './mail/mail.controller';
+import { MailService } from './mail/mail.service';
+import { MailModule } from './mail/mail.module';
 import * as cookieParser from 'cookie-parser';
 
 @Module({
@@ -33,6 +36,7 @@ import * as cookieParser from 'cookie-parser';
     }),
     ScheduleModule.forRoot(),
     userModule,
+    MailModule,
     // adminModule,
   ],
   controllers: [
@@ -45,6 +49,7 @@ import * as cookieParser from 'cookie-parser';
     AdminController,
     NotifikasiController,
     JawabanPertanyaanController,
+    MailController,
   ],
   providers: [
     AppService,
@@ -56,6 +61,7 @@ import * as cookieParser from 'cookie-parser';
     AdminService,
     NotifikasiService,
     JawabanPertanyaanService,
+    MailService,
   ],
 })
 export class AppModule {}

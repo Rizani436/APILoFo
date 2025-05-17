@@ -35,6 +35,10 @@ export class MyRedisService {
     return this.cache;
   }
 
+  async kodePassword(email: string, kode: string, ttl: number) {
+    await this.cache.set(email, kode, 'EX', ttl); // Simpan dengan TTL (3600 = 1 Jam)
+  }
+
   async setSession(token: string, dataData: any) {
     const data = { 
       email: dataData.email,
@@ -54,6 +58,12 @@ export class MyRedisService {
   }
   async deleteSession(token: string) {
     await this.cache.del(token);
+  }
+  async getKode(email: string) {
+    const data = await this.cache.get(email);
+    const kode = JSON.parse(data);
+    if (!data) return null;
+    return data;
   }
 
 }

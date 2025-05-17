@@ -1,8 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { CreateUserDto, UpdateUserDto } from 'src/user/dto/user';
 import { JwtService } from '@nestjs/jwt';
 import { MyRedisService } from '../my-redis/my-redis.module';
+import { MailService } from '../mail/mail.service';
 import * as bcrypt from 'bcrypt';
 import { Http2ServerRequest } from 'http2';
 import { File as MulterFile } from 'multer';
@@ -16,6 +17,7 @@ export class userService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly redisSession: MyRedisService,
+    private readonly mailService: MailService,
   ) {}
 
   async register(dataData: CreateUserDto){
@@ -304,7 +306,31 @@ export class userService {
     });
   }
 
+  async findByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
+  // auth.service.ts
+async sendResetCode(email: string) {
+  const user = await this.findByEmail(email);
+  if (!user) throw new NotFoundException('User tidak ditemukan');
+
+  const kode = Math.floor(100000 + Math.random() * 900000).toString(); // contoh kode 6 digit
+  await this.setCode(user.email, kode, 300 ); // expire dalam 5 menit
+
+  // kirim via email (gunakan nodemailer atau mailgun/sendgrid)
+  await this.mailService.sendResetCodeEmail(email, kode);
+
+  return { message: 'Kode reset telah dikirim ke email' };
+}
+
+
   
+  async setCode(email: string, kode: any, ttl: number) {
+    await this.redisSession.kodePassword(`reset-code-${email}`, kode, ttl); // Simpan dengan TTL (3600 = 1 Jam)
+  }
   async setRedis(token: string, data: any) {
     this.redisSession.setSession(token, data);
   }
@@ -315,4 +341,59 @@ export class userService {
     }
     return this.redisSession.deleteSession(token);
   }
+
+  async confirmResetCode(email: string, code: string) {
+    const storedCode = await this.getKode(`reset-code-${email}`);
+    const user = await this.findByEmail(email);
+  if (!user) throw new NotFoundException('User tidak ditemukan');
+    if (!storedCode) throw new BadRequestException('Kode tidak valid atau sudah kadaluarsa');
+    if (storedCode !== code) throw new BadRequestException('Kode tidak valid');
+    return { message: 'Kode valid' };
+  }
+
+  async resetPassword(email: string, newPassword: string, confirmPassword: string) {
+
+  const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new HttpException('user tidak ditemukan', HttpStatus.NOT_FOUND);
+    }
+
+    if (newPassword !== confirmPassword) {
+      throw new HttpException(
+        'password baru dan konfirmasi password tidak sama',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const isSamePassword = await bcrypt.compare(newPassword, user.password);
+    if (isSamePassword) {
+      throw new HttpException(
+        'password baru tidak boleh sama dengan password saat ini',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await this.prisma.user.update({
+      where: { email },
+      data: { password: hashedPassword },
+    });
+
+  await this.deleteKode(`reset-code-${email}`); // hapus setelah dipakai
+
+  return { message: 'Password berhasil diubah' };
+}
+async deleteKode(token: string) {
+    return this.redisSession.deleteSession(token);
+  }
+  async getKode(token: string) {
+    const data = await this.redisSession.getKode(token);
+    if (!data) return null;
+    return data;
+  }
+
 }
