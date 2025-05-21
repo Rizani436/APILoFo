@@ -47,6 +47,18 @@ export class BarangTemuanService {
     return barangTemuan;
   }
 
+  async getAllVerifikasi() {
+    const barangTemuan = await this.prisma.barangTemuan.findMany({
+      where: {
+        status: 'Menunggu',
+      },
+    });
+    if (barangTemuan.length == 0) {
+      throw new HttpException('barang temuan tidak ada', HttpStatus.NOT_FOUND);
+    }
+    return barangTemuan;
+  }
+
   async getById(id: string) {
     const barangTemuan = await this.prisma.barangTemuan.findUnique({
       where: {

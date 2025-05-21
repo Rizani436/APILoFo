@@ -128,6 +128,18 @@ export class BarangHilangService {
     }
     return barangHilang;
   }
+  async getAllVerifikasi() {
+    const barangHilang = await this.prisma.barangHilang.findMany({
+      where: {
+        status: 'Menunggu',
+      },
+    });
+    if (barangHilang.length == 0) {
+      throw new HttpException('barang hilang tidak ada', HttpStatus.NOT_FOUND);
+    }
+    return barangHilang;
+  }
+
 
   async getOtherAll(userId: string, kategori: any) {
     if (typeof kategori === 'object' && kategori !== null) {

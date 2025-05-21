@@ -88,6 +88,10 @@ export class BarangTemuanController {
     return this.BarangTemuanService.getOtherAll(id, kategori);
   }
 
+  @Get('getAllVerifikasi')
+  async getAllVerifikasi() {
+    return this.BarangTemuanService.getAllVerifikasi();
+  }
   @Put('update-gambar/:id')
     @UseInterceptors(
       FileInterceptor('file', {

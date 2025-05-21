@@ -56,10 +56,17 @@ export class BarangHilangController {
     return this.BarangHilangService.getAll();
   }
 
+  @Get('getAllVerifikasi')
+  async getAllVerifikasi() {
+    return this.BarangHilangService.getAllVerifikasi();
+  }
+
   @Get('getById/:id')
   async getById(@Param('id') id: string) {
     return this.BarangHilangService.getById(id);
   }
+
+  
 
   @Put('update/:id')
   async update(

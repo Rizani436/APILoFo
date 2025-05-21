@@ -4,6 +4,8 @@ import { CreateUserDto, UpdateUserDto } from 'src/user/dto/user';
 import { JwtService } from '@nestjs/jwt';
 import { MyRedisService } from '../my-redis/my-redis.module';
 import { MailService } from '../mail/mail.service';
+import { Response } from 'express';
+import * as ExcelJS from 'exceljs';
 import * as bcrypt from 'bcrypt';
 import { Http2ServerRequest } from 'http2';
 import { File as MulterFile } from 'multer';
@@ -388,4 +390,37 @@ async deleteKode(token: string) {
     return data;
   }
 
+  async export(res: Response) {
+    const data = await this.prisma.user.findMany();
+    if (data.length == 0) {
+      throw new HttpException('No user found', HttpStatus.NOT_FOUND);
+    }
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('User Data');
+    worksheet.addRow(['username', 'email', 'password', 'namaLengkap', 'jenisKelamin', 'alamat', 'noHP', 'pictUrl']);
+    data.forEach((user) => {
+      worksheet.addRow([
+        user.username,
+        user.email,
+        user.password,
+        user.namaLengkap,
+        user.jenisKelamin,
+        user.alamat,
+        user.noHP,
+        user.pictUrl,
+      ]);
+    });
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    );
+    res.setHeader('Content-Disposition', 'attachment; filename=user.xlsx');
+
+    // Kirim file sebagai response
+    await workbook.xlsx.write(res);
+    res.end();
+  }
 }
+
+
